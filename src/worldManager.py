@@ -157,7 +157,7 @@ class WorldManager(object):
                 return 1
         #draw sprites
         
-        self.sprite_positions.sort(sprite_compare)
+        self.sprite_positions.sort()
         for sprite in self.sprite_positions:
             #translate sprite position to relative to camera
             spriteX = sprite[0] - self.camera.x;
@@ -187,8 +187,9 @@ class WorldManager(object):
             drawEndX = spriteWidth / 2 + spritesurfaceX
             
             if spriteHeight < 1000:
-                for stripe in range(drawStartX, drawEndX):
+                for stripe in range(int(drawStartX), int(drawEndX)):
                     texX = int(256 * (stripe - (-spriteWidth / 2 + spritesurfaceX)) * texWidth / spriteWidth) / 256
+                    texX = int(texX)
                     #the conditions in the if are:
                     ##1) it's in front of camera plane so you don't see things behind you
                     ##2) it's on the surface (left)
@@ -196,7 +197,6 @@ class WorldManager(object):
                     ##4) ZBuffer, with perpendicular distance
                     if(transformY > 0 and stripe > 0 and stripe < w and transformY < zBuffer[stripe]):
                         surface.blit(pygame.transform.scale(self.sprites[sprite[2]][texX], (1, spriteHeight)), (stripe, drawStartY))
-    
 
 class Camera(object):
     def __init__(self,x,y,dirx,diry,planex,planey):
